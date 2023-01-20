@@ -195,10 +195,12 @@ export default function handler(
                           });
 
                         try {
+                          let index = 1;
+                          if (weights[0].includes("Final")) index = 0;
                           weight_table[item[0]] = {
-                            W: parseFloat(weights[1].replace("%", "")),
-                            CW: parseFloat(weights[2].replace("%", "")),
-                            SA: parseFloat(weights[3].replace("%", "")),
+                            W: parseFloat(weights[index].replace("%", "")),
+                            CW: parseFloat(weights[index + 1].replace("%", "")),
+                            SA: parseFloat(weights[index + 2].replace("%", "")),
                           };
                         } catch (err) {
                           return;

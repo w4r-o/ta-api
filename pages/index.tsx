@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { useState } from "react";
-import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const [username, setUsername] = useState("");
@@ -9,7 +8,7 @@ export default function Home() {
   const request = () => {
     if (username == "" || password == "") return;
     console.log("fetching", username, password);
-    fetch("/api/getMarks", {
+    fetch("/api/getCourses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,11 +18,17 @@ export default function Home() {
         password: password,
       }),
     })
-      .then((res) =>
-        res.json().then((data) => {
-          console.log(data);
-        })
-      )
+      .then((res) => {
+        res
+          .json()
+          .then((result) => {
+            result = result.response;
+            console.log("res:", result);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      })
       .catch((err) => {
         console.log("error:", err);
       });
@@ -37,7 +42,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
+      <main>
         <input
           type="text"
           placeholder="Username"

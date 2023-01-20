@@ -13,10 +13,12 @@
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
+    "cheerio": "^1.0.0-rc.12",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "fetch-cookie": "^2.1.0",
     "next": "13.1.1",
+    "node-fetch-cookies": "^2.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "4.9.4"

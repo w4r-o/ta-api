@@ -68,12 +68,62 @@ export default function handler(
                 body: "credentials",
               }
             )
-              .then((data: any) => {
-                data.text().then((data: any) => {
-                  courses[i].data = data;
-                  i++;
-                  getCourseData();
-                });
+              .then((res: any) => {
+                res
+                  .text()
+                  .then((res: any) => {
+                    const $ = cheerio.load(res);
+                    let data: any = [];
+                    let counter = 1;
+
+                    //parse html
+                    $('table[width="100%"]')
+                      .children()
+                      .children()
+                      .each((i: any, elem: any) => {
+                        counter++;
+                        if (counter % 2 === 0) return;
+
+                        let assignment: any = {};
+
+                        assignment.name = $(elem)
+                          .find('td[rowspan="2"]')
+                          .text()
+                          .replaceAll("\t", "");
+
+                        [
+                          ["KU", "ffffaa"],
+                          ["A", "ffd490"],
+                          ["T", "c0fea4"],
+                          ["C", "afafff"],
+                        ].forEach((item) => {
+                          const category = $(elem)
+                            .find(`td[bgcolor="${item[1]}"]`)
+                            .text()
+                            .replaceAll("\t", "")
+                            .trim();
+                          assignment[item[0]] = {
+                            get: category ? category.split(" / ")[0] : 0,
+                            total: category
+                              ? category.split(" / ")[1].split(" = ")[0]
+                              : 0,
+                            weight: category
+                              ? category.split("weight=")[1].split("\n")[0]
+                              : 0,
+                            finished: category
+                              ? !category.includes("finished")
+                              : true,
+                          };
+                        });
+                        data.push(assignment);
+                      });
+                    courses[i].data = [...data];
+                    i++;
+                    getCourseData();
+                  })
+                  .catch((err: any) => {
+                    throw err;
+                  });
               })
               .catch((err: any) => {
                 res.status(500).json({

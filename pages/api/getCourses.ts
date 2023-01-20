@@ -201,13 +201,17 @@ export default function handler(
                             SA: parseFloat(weights[3].replace("%", "")),
                           };
                         } catch (err) {
-                          weight_table[item[0]] = {
-                            W: 0,
-                            CW: 0,
-                            SA: 0,
-                          };
+                          return;
                         }
                       });
+
+                      if (assignments.length === 0) {
+                        assignments = [];
+                      }
+
+                      if (Object.keys(weight_table).length === 0) {
+                        weight_table = {};
+                      }
 
                       courses[i].assignments = [...assignments];
                       courses[i].weight_table = { ...weight_table };

@@ -100,7 +100,16 @@ export default function handler(
                         .children()
                         .each((i: any, elem: any) => {
                           counter++;
-                          if (counter % 2 === 0) return;
+                          if (counter % 2 === 0) {
+                            if (counter > 2) {
+                              assignments[assignments.length - 1].feedback = $(
+                                elem
+                              )
+                                .text()
+                                .trim();
+                            }
+                            return;
+                          }
 
                           let assignment: any = {};
 
@@ -114,6 +123,8 @@ export default function handler(
                             ["A", "ffd490"],
                             ["T", "c0fea4"],
                             ["C", "afafff"],
+                            ["O", "eeeeee"],
+                            ["F", "cccccc"],
                           ].forEach((item) => {
                             const category = $(elem)
                               .find(`td[bgcolor="${item[1]}"]`)

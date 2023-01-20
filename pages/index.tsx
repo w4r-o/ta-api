@@ -7,7 +7,6 @@ export default function Home() {
 
   const request = () => {
     if (username == "" || password == "") return;
-    console.log("fetching", username, password);
     fetch("/api/getCourses", {
       method: "POST",
       headers: {

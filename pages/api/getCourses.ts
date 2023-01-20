@@ -47,8 +47,8 @@ export default function handler(
               const jsonCourse = {
                 code: filteredCourse[0].split(" : ")[0],
                 name: filteredCourse[0].split(" : ")[1],
-                block: filteredCourse[1].replace("Block: ", "").split(" ")[0],
-                room: filteredCourse[1].split("rm. ", "")[1],
+                block: filteredCourse[1].replace("Block: P", "").split(" ")[0],
+                room: filteredCourse[1].split("rm. ")[1],
                 start_date: filteredCourse[2].split(" ")[0],
                 end_date: filteredCourse[3].trim(),
                 overall_mark: filteredCourse[4].trim(),
@@ -131,18 +131,35 @@ export default function handler(
                               .text()
                               .replaceAll("\t", "")
                               .trim();
-                            assignment[item[0]] = {
-                              get: category ? category.split(" / ")[0] : 0,
-                              total: category
-                                ? category.split(" / ")[1].split(" = ")[0]
-                                : 0,
-                              weight: category
-                                ? category.split("weight=")[1].split("\n")[0]
-                                : 0,
-                              finished: category
-                                ? !category.includes("finished")
-                                : true,
-                            };
+                            try {
+                              assignment[item[0]] = {
+                                get: category
+                                  ? parseFloat(category.split(" / ")[0])
+                                  : 0,
+                                total: category
+                                  ? parseFloat(
+                                      category.split(" / ")[1].split(" = ")[0]
+                                    )
+                                  : 0,
+                                weight: category
+                                  ? parseFloat(
+                                      category
+                                        .split("weight=")[1]
+                                        .split("\n")[0]
+                                    )
+                                  : 0,
+                                finished: category
+                                  ? !category.includes("finished")
+                                  : true,
+                              };
+                            } catch (e) {
+                              assignment[item[0]] = {
+                                get: 0,
+                                total: 0,
+                                weight: 0,
+                                finished: true,
+                              };
+                            }
                           });
                           assignments.push(assignment);
                         });
@@ -166,11 +183,19 @@ export default function handler(
                             weights.push($(elem).text().trim());
                           });
 
-                        weight_table[item[0]] = {
-                          W: weights[1],
-                          CW: weights[2],
-                          SA: weights[3],
-                        };
+                        try {
+                          weight_table[item[0]] = {
+                            W: parseFloat(weights[1].replace("%", "")),
+                            CW: parseFloat(weights[2].replace("%", "")),
+                            SA: parseFloat(weights[3].replace("%", "")),
+                          };
+                        } catch (err) {
+                          weight_table[item[0]] = {
+                            W: 0,
+                            CW: 0,
+                            SA: 0,
+                          };
+                        }
                       });
 
                       courses[i].assignments = [...assignments];

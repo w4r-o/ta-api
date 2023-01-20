@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import makeFetchCookie from "fetch-cookie";
 const cheerio = require("cheerio");
+//@ts-ignore
+import { fetch as cookieFetch, CookieJar } from "node-fetch-cookies";
 
 type Data = {
   response: any;
@@ -14,17 +15,17 @@ export default function handler(
   const username = req.body.username;
   const password = req.body.password;
 
-  const fetchCookie = makeFetchCookie(fetch);
+  const cookieJar = new CookieJar();
 
-  fetchCookie(
+  cookieFetch(
+    cookieJar,
     `https://ta.yrdsb.ca/live/index.php?username=${username}&password=${password}&submit=Login&subject_id=0`,
     {
       method: "POST",
-      credentials: "include",
+      body: "credentials",
     }
   )
     .then((data: any) => {
-      console.log(data.headers);
       data.text().then((data: any) => {
         const $ = cheerio.load(data);
         let courses: any = [];
@@ -55,9 +56,38 @@ export default function handler(
           }
         });
 
-        res.status(200).json({
-          response: courses,
-        });
+        //recurse through courses to get data
+        let i = 0;
+        function getCourseData() {
+          if (i < courses.length) {
+            cookieFetch(
+              cookieJar,
+              "https://ta.yrdsb.ca/live/students/" + courses[i].link,
+              {
+                method: "POST",
+                body: "credentials",
+              }
+            )
+              .then((data: any) => {
+                data.text().then((data: any) => {
+                  courses[i].data = data;
+                  i++;
+                  getCourseData();
+                });
+              })
+              .catch((err: any) => {
+                res.status(500).json({
+                  response: "error: " + err,
+                });
+              });
+          } else {
+            res.status(200).json({
+              response: courses,
+            });
+          }
+        }
+
+        getCourseData();
       });
     })
 

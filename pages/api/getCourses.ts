@@ -73,10 +73,10 @@ export default function handler(
                   .text()
                   .then((res: any) => {
                     const $ = cheerio.load(res);
-                    let data: any = [];
-                    let counter = 1;
 
-                    //parse html
+                    //assignments
+                    let assignments: any = [];
+                    let counter = 1;
                     $('table[width="100%"]')
                       .children()
                       .children()
@@ -115,9 +115,38 @@ export default function handler(
                               : true,
                           };
                         });
-                        data.push(assignment);
+                        assignments.push(assignment);
                       });
-                    courses[i].data = [...data];
+
+                    // weight_table
+                    let weight_table: any = {};
+                    [
+                      ["KU", "ffffaa"],
+                      ["A", "ffd490"],
+                      ["T", "c0fea4"],
+                      ["C", "afafff"],
+                      ["O", "eeeeee"],
+                      ["F", "cccccc"],
+                    ].forEach((item) => {
+                      const weights: any = [];
+
+                      $('table[cellpadding="5"]')
+                        .find(`tr[bgcolor="#${item[1]}"]`)
+                        .children()
+                        .each((i: any, elem: any) => {
+                          weights.push($(elem).text().trim());
+                        });
+
+                      weight_table[item[0]] = {
+                        W: weights[1],
+                        CW: weights[2],
+                        SA: weights[3],
+                      };
+                    });
+
+                    courses[i].assignments = [...assignments];
+                    courses[i].weight_table = { ...weight_table };
+
                     i++;
                     getCourseData();
                   })

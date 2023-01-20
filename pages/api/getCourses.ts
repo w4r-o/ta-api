@@ -196,7 +196,10 @@ export default function handler(
 
                         try {
                           let index = 1;
-                          if (weights[0].includes("Final")) index = 0;
+                          if (weights[0].includes("Final")) {
+                            index = 0;
+                            weights[index] = "0%";
+                          }
                           weight_table[item[0]] = {
                             W: parseFloat(weights[index].replace("%", "")),
                             CW: parseFloat(weights[index + 1].replace("%", "")),

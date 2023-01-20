@@ -95,17 +95,17 @@ export default function handler(
                     .then((res: any) => {
                       if (res.includes("Invalid Login")) {
                         res.status(401).json({
-                          response: "Invalid Login",
+                          response: { error: "Invalid Login" },
                         });
                         return;
                       } else if (res.includes("Access Denied")) {
                         res.status(403).json({
-                          response: "Access Denied",
+                          response: { error: "Access Denied" },
                         });
                         return;
                       } else if (res.includes("Session Expired")) {
                         res.status(401).json({
-                          response: "Session Expired",
+                          response: { error: "Session Expired" },
                         });
                         return;
                       }
@@ -150,34 +150,26 @@ export default function handler(
                               .text()
                               .replaceAll("\t", "")
                               .trim();
-                            try {
-                              assignment[item[0]] = {
-                                get: category
-                                  ? parseFloat(category.split(" / ")[0])
-                                  : 0,
-                                total: category
-                                  ? parseFloat(
-                                      category.split(" / ")[1].split(" = ")[0]
-                                    )
-                                  : 0,
-                                weight: category
-                                  ? parseFloat(
-                                      category
-                                        .split("weight=")[1]
-                                        .split("\n")[0]
-                                    )
-                                  : 0,
-                                finished: category
-                                  ? !category.includes("finished")
-                                  : true,
-                              };
-                            } catch (e) {
-                              assignment[item[0]] = {
-                                get: 0,
-                                total: 0,
-                                weight: 0,
-                                finished: true,
-                              };
+                            if (category) {
+                              try {
+                                assignment[item[0]] = {
+                                  get: parseFloat(category.split(" / ")[0]),
+                                  total: parseFloat(
+                                    category.split(" / ")[1].split(" = ")[0]
+                                  ),
+                                  weight: parseFloat(
+                                    category.split("weight=")[1].split("\n")[0]
+                                  ),
+                                  finished: !category.includes("finished"),
+                                };
+                              } catch (e) {
+                                assignment[item[0]] = {
+                                  get: 0,
+                                  total: 0,
+                                  weight: 0,
+                                  finished: true,
+                                };
+                              }
                             }
                           });
                           assignments.push(assignment);
@@ -244,7 +236,7 @@ export default function handler(
     })
     .catch((err: any) => {
       res.status(500).json({
-        response: err,
+        response: { error: err },
       });
     });
 }

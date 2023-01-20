@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 const cheerio = require("cheerio");
+const Cors = require("cors");
 //@ts-ignore
 import { fetch as cookieFetch, CookieJar } from "node-fetch-cookies";
 
@@ -8,10 +9,28 @@ type Data = {
   response: any;
 };
 
+const cors = Cors({
+  methods: ["POST"],
+});
+
+function runMiddleware(req: any, res: any, fn: any) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  runMiddleware(req, res, cors);
+
   const username = req.body.username;
   const password = req.body.password;
 

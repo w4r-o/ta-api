@@ -26,6 +26,26 @@ function runMiddleware(req: any, res: any, fn: any) {
   });
 }
 
+function parseOverallMark(mark: string) {
+  mark = mark.replaceAll(" ", "");
+  const result: any = {
+    mark: "N/A",
+    isFinal: false,
+    isMidterm: false,
+  };
+
+  if (mark.includes("FINAL")) {
+    result.mark = parseFloat(mark.split("FINALMARK:")[1].split("%")[0]);
+    result.isFinal = true;
+  } else if (mark.includes("currentmark")) {
+    result.mark = parseFloat(mark.split("currentmark=")[1].split("%")[0]);
+  } else if (mark.includes("MIDTERM")) {
+    result.mark = parseFloat(mark.split("MIDTERMMARK:")[1].split("%")[0]);
+    result.isMidterm = true;
+  }
+  return result;
+}
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -73,6 +93,30 @@ export default function handler(
                   }
                 }
                 if (filteredCourse.length > 3) {
+                  const overall: any = {
+                    mark: "N/A",
+                    isFinal: false,
+                    isMidterm: false,
+                  };
+                  if (filteredCourse[4]) {
+                    let mark = filteredCourse[4]?.trim().replaceAll(" ", "");
+                    if (mark.includes("FINAL")) {
+                      overall.mark = parseFloat(
+                        mark.split("FINALMARK:")[1].split("%")[0]
+                      );
+                      overall.isFinal = true;
+                    } else if (mark.includes("currentmark")) {
+                      overall.mark = parseFloat(
+                        mark.split("currentmark=")[1].split("%")[0]
+                      );
+                    } else if (mark.includes("MIDTERM")) {
+                      overall.mark = parseFloat(
+                        mark.split("MIDTERMMARK:")[1].split("%")[0]
+                      );
+                      overall.isMidterm = true;
+                    }
+                  }
+
                   const jsonCourse = {
                     code: filteredCourse[0].split(" : ")[0],
                     name: filteredCourse[0].split(" : ")[1],
@@ -82,7 +126,9 @@ export default function handler(
                     room: filteredCourse[1].split("rm. ")[1],
                     start_time: filteredCourse[2].split(" ")[0],
                     end_time: filteredCourse[3].trim(),
-                    overall_mark: filteredCourse[4]?.trim().replaceAll(" ", ""),
+                    overall_mark: overall.mark,
+                    isFinal: overall.isFinal,
+                    isMidterm: overall.isMidterm,
                     link: link,
                   };
                   courses.push(jsonCourse);

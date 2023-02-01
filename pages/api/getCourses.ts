@@ -206,7 +206,7 @@ export default function handler(
                                 .trim();
                               if (category) {
                                 try {
-                                  assignment[item[0]] = {
+                                  assignment[item[0]] = [{
                                     get: parseFloat(category.split(" / ")[0]),
                                     total: parseFloat(
                                       category.split(" / ")[1].split(" = ")[0]
@@ -217,7 +217,7 @@ export default function handler(
                                         .split("\n")[0]
                                     ),
                                     finished: !category.includes("finished"),
-                                  };
+                                  }];
                                 } catch (e) {
                                   assignment[item[0]] = [
                                     {

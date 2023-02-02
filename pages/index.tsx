@@ -115,19 +115,9 @@ export default function Home() {
           </p>
           <h3 className="text-xl font-bold text-white mt-5">Request</h3>
           <p className="text-base text-center font-normal text-white mt-5">
-            Make a POST request to{" "}
-            <code className="text-green-light drop-shadow-[0px_0px_8px_rgba(219,231,219,0.6)]">
-              /api/getCourses
-            </code>
-            , with a JSON body of two string parameters,{" "}
-            <code className="text-green-light drop-shadow-[0px_0px_8px_rgba(219,231,219,0.6)]">
-              username
-            </code>{" "}
-            and{" "}
-            <code className="text-green-light drop-shadow-[0px_0px_8px_rgba(219,231,219,0.6)]">
-              password
-            </code>
-            . Node fetch example provided below:
+            Make a POST request to <code>/api/getCourses</code>, with a JSON
+            body of two string parameters, <code>username</code> and{" "}
+            <code>password</code>. Node fetch example provided below:
           </p>
           <div className="w-full p-2 mt-5 ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] bg-green-transparent rounded-3xl">
             <div className="w-full max-h-60 overflow-y-scroll overflow-x-hidden px-5 py-3">
@@ -146,6 +136,195 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
               </pre>
             </div>
           </div>
+          <h3 className="text-xl font-bold text-white mt-5">Response</h3>
+          <p className="text-base text-center font-normal text-white mt-5">
+            The response will be a JSON array of objects, one for each course.
+            The objects will have the following properties:
+          </p>
+          <table className="w-full mt-5">
+            <thead>
+              <tr>
+                <th className="text-center text-white">Property</th>
+                <th className="text-center text-white">Type</th>
+                <th className="text-center text-white">Description</th>
+                <th className="text-center text-white">Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="text-center">
+                  <code>code</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>string</code>
+                </td>
+                <td className="text-left text-white">Course code</td>
+                <td className="text-center">
+                  <code>"ICS4U1-03"</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>name</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>string</code>
+                </td>
+                <td className="text-left text-white">Course name</td>
+                <td className="text-center">
+                  <code>"Computer and Information Science"</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>block</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>string</code>
+                </td>
+                <td className="text-left text-white">Block/period</td>
+                <td className="text-center">
+                  <code>"2"</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>room</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>string</code>
+                </td>
+                <td className="text-left text-white">Room number</td>
+                <td className="text-center">
+                  <code>"208"</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>start_time</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>string</code>
+                </td>
+                <td className="text-left text-white">Start time</td>
+                <td className="text-center">
+                  <code>"2023-02-06"</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>end_time</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>string</code>
+                </td>
+                <td className="text-left text-white">End time</td>
+                <td className="text-center">
+                  <code>"2023-07-01"</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>overall_mark</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>number | string</code>
+                </td>
+                <td className="text-left text-white">Overall mark</td>
+                <td className="text-center">
+                  <code>99.4 | "N/A"</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>isFinal</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>boolean</code>
+                </td>
+                <td className="text-left text-white">
+                  If the mark is a final mark
+                </td>
+                <td className="text-center">
+                  <code>true | false</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>isMidterm</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>boolean</code>
+                </td>
+                <td className="text-left text-white">
+                  If the mark is a midterm mark
+                </td>
+                <td className="text-center">
+                  <code>true | false</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>assignments</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>Array</code>
+                </td>
+                <td className="text-left text-white">
+                  Array of assignment objects
+                </td>
+                <td className="text-center">
+                  <code>[]</code>
+                </td>
+              </tr>
+              <tr>
+                <td className="text-center">
+                  <code>weight_table</code>
+                </td>
+                <td className="text-center text-emerald-200/80">
+                  <code>Object</code>
+                </td>
+                <td className="text-left text-white">
+                  Course weightings for each category (KU/T/C/A/F/O)
+                </td>
+                <td className="text-center">
+                  <code>{"{}"}</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h4 className="text-xl text-center font-bold text-white mt-5">
+            Abbreviations
+          </h4>
+          <ul className="list-disc list-inside text-white">
+            <li>
+              <code>KU</code> - Knowledge/Understanding
+            </li>
+            <li>
+              <code>T</code> - Thinking
+            </li>
+            <li>
+              <code>C</code> - Communication
+            </li>
+            <li>
+              <code>A</code> - Application
+            </li>
+            <li>
+              <code>F</code> - Final
+            </li>
+            <li>
+              <code>O</code> - Other
+            </li>
+            <li>
+              <code>W</code> - Term weighting (e.g. /70%)
+            </li>
+            <li>
+              <code>CW</code> - Course weighting (e.g. /100%)
+            </li>
+            <li>
+              <code>SA</code> - Student achievement (e.g. 95.8%)
+            </li>
+          </ul>
         </section>
       </main>
     </>

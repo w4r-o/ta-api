@@ -160,7 +160,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
                 </td>
                 <td className="text-left text-white">Course code</td>
                 <td className="text-center">
-                  <code>"ICS4U1-03"</code>
+                  <code>&quot;ICS4U1-03&quot;</code>
                 </td>
               </tr>
               <tr>
@@ -172,7 +172,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
                 </td>
                 <td className="text-left text-white">Course name</td>
                 <td className="text-center">
-                  <code>"Computer and Information Science"</code>
+                  <code>&quot;Computer and Information Science&quot;</code>
                 </td>
               </tr>
               <tr>
@@ -184,7 +184,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
                 </td>
                 <td className="text-left text-white">Block/period</td>
                 <td className="text-center">
-                  <code>"2"</code>
+                  <code>&quot;2&quot;</code>
                 </td>
               </tr>
               <tr>
@@ -196,7 +196,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
                 </td>
                 <td className="text-left text-white">Room number</td>
                 <td className="text-center">
-                  <code>"208"</code>
+                  <code>&quot;208&quot;</code>
                 </td>
               </tr>
               <tr>
@@ -208,7 +208,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
                 </td>
                 <td className="text-left text-white">Start time</td>
                 <td className="text-center">
-                  <code>"2023-02-06"</code>
+                  <code>&quot;2023-02-06&quot;</code>
                 </td>
               </tr>
               <tr>
@@ -220,7 +220,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
                 </td>
                 <td className="text-left text-white">End time</td>
                 <td className="text-center">
-                  <code>"2023-07-01"</code>
+                  <code>&quot;2023-07-01&quot;</code>
                 </td>
               </tr>
               <tr>
@@ -232,7 +232,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
                 </td>
                 <td className="text-left text-white">Overall mark</td>
                 <td className="text-center">
-                  <code>99.4 | "N/A"</code>
+                  <code>99.4 | &quot;N/A&quot;</code>
                 </td>
               </tr>
               <tr>

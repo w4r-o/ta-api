@@ -1,15 +1,19 @@
 import Head from "next/head";
 import { useState } from "react";
 import { ImDownload2 } from "react-icons/im";
+import { PropagateLoader } from "react-spinners";
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [res, setRes] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const request = () => {
     if (username == "" || password == "") return;
+    setLoading(true);
+    if (error) setError("");
     fetch("/api/getCourses", {
       method: "POST",
       headers: {
@@ -26,12 +30,16 @@ export default function Home() {
           .then((result) => {
             if (!res.ok) throw result.response.error;
             setRes(result.response);
+            setLoading(false);
           })
           .catch((err) => {
             throw err;
           })
       )
-      .catch((err) => setError(err));
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+      });
   };
 
   const download = () => {
@@ -68,27 +76,28 @@ export default function Home() {
               href="https://teachassistapp.github.io/"
               className="underline font-bold hover:drop-shadow-[0px_0px_10px_rgba(219,231,219,0.7)] duration-300 ease-in-out hover:tracking-wider"
               rel="noreferrer noopener"
+              target="_blank"
             >
               mobile app
             </a>
             .
           </p>
-          <div className="w-full flex flex-col landscape:flex-row items-center justify-evenly mt-7">
+          <div className="w-full flex flex-col landscape:flex-row items-center justify-evenly mt-7 portrait:px-3">
             <input
               type="text"
               placeholder="Username"
               onChange={(e) => setUsername(e.target.value)}
-              className="bg-green-transparent text-white focus:outline-none mb-4 landscape:w-1/3 px-6 py-3 placeholder-white-transparent rounded-full ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
+              className="bg-green-transparent text-white focus:outline-none mb-4 landscape:w-1/3 w-full px-6 py-3 placeholder-white-transparent rounded-full ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
             />
             <input
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-green-transparent text-white focus:outline-none mb-4 landscape:w-1/3 px-6 py-3 placeholder-white-transparent rounded-full ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
+              className="bg-green-transparent text-white focus:outline-none mb-4 landscape:w-1/3 w-full px-6 py-3 placeholder-white-transparent rounded-full ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
             />
             <button
               onClick={request}
-              className="bg-green-light landscape:w-1/4 text-green-dark mb-4 text-center font-bold px-6 py-3 rounded-full ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] hover:scale-105 duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
+              className="bg-green-light landscape:w-1/4 w-full text-green-dark mb-4 text-center font-bold px-6 py-3 rounded-full shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] hover:scale-105 duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
             >
               Get Marks!
             </button>
@@ -98,27 +107,36 @@ export default function Home() {
               {error}.
             </p>
           )}
+          <PropagateLoader
+            color={"#D7E7DB6A"}
+            loading={loading}
+            size={12}
+            className="mt-5"
+          />
         </header>
-        {!error && res && (
-          <section className="w-full flex flex-col items-center mt-10">
-            <h2 className="text-3xl font-bold text-white">Response</h2>
-            <div className="w-full p-2 mt-5 ring-2 ring-green-light bg-green-transparent shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] rounded-3xl">
-              <div className="w-full max-h-60 overflow-y-scroll overflow-x-hidden px-5 py-3">
-                <pre className="text-white text-sm font-normal w-full">
-                  {JSON.stringify(res, null, 2)}
-                </pre>
-              </div>
+        <section
+          className={
+            "w-full flex flex-col items-center mt-10 duration-1000 overflow-y-hidden px-5 ease-in-out " +
+            (!error && res ? "max-h-full" : "max-h-0")
+          }
+        >
+          <h2 className="text-3xl font-bold text-white">Response</h2>
+          <div className="w-full p-2 mt-5 ring-2 ring-green-light bg-green-transparent shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] rounded-3xl">
+            <div className="w-full h-72 min-h-[100px] max-h-[500px] overflow-y-scroll overflow-x-hidden px-5 py-3 resize-y">
+              <pre className="text-white text-sm font-normal w-full">
+                {JSON.stringify(res, null, 2)}
+              </pre>
             </div>
-            <button
-              onClick={download}
-              className="bg-green-light text-green-dark text-center font-bold mt-5 px-6 py-3 rounded-full ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] hover:scale-105 duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
-            >
-              Download JSON
-              <ImDownload2 className="inline-block ml-2" />
-            </button>
-          </section>
-        )}
-        <section className="w-full flex flex-col items-center mt-20">
+          </div>
+          <button
+            onClick={download}
+            className="bg-green-light text-green-dark text-center font-bold mt-5 mb-10 px-6 py-3 rounded-full ring-2 ring-green-light shadow-[0px_0px_8px_3px_rgba(219,231,219,0.6)] hover:scale-105 duration-300 ease-in-out hover:shadow-[0px_0px_20px_3px_rgba(219,231,219,0.7)]"
+          >
+            Download JSON
+            <ImDownload2 className="inline-block ml-2" />
+          </button>
+        </section>
+        <section className="w-full flex flex-col items-center mt-16">
           <h2 className="text-3xl font-bold text-white">About</h2>
           <p className="text-sm md:text-base text-center font-normal text-white mt-5">
             This API is safe and secure, unlike other APIs which may store your
@@ -370,7 +388,7 @@ fetch('https://ta-api.vercel.app/api/getCourses', {
               href="https://www.ryanzhu.com"
               target="_blank"
               rel="noreferrer noopener"
-              className="text-emerald-200/80 hover:text-emerald-200/100"
+              className="text-emerald-200/80 hover:text-emerald-200/100 duration-500 ease-in-out hover:font-bold hover:tracking-wider"
             >
               Ryan Zhu
             </a>

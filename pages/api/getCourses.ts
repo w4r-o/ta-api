@@ -77,9 +77,27 @@ export default function handler(
         data
           .text()
           .then((data: any) => {
+            // check if login is valid
+            if (data.includes("Invalid Login")) {
+              res.status(401).json({
+                response: { error: "Invalid Login" },
+              });
+              return;
+            } else if (data.includes("Access Denied")) {
+              res.status(403).json({
+                response: { error: "Access Denied" },
+              });
+              return;
+            } else if (data.includes("Session Expired")) {
+              res.status(401).json({
+                response: { error: "Session Expired" },
+              });
+              return;
+            }
+
+            //parse html
             const $ = cheerio.load(data);
             let courses: any = [];
-            //parse html
             $(".green_border_message div table tr").each(
               (i: any, elem: any) => {
                 const link = $(elem).find("a").attr("href");
@@ -206,18 +224,20 @@ export default function handler(
                                 .trim();
                               if (category) {
                                 try {
-                                  assignment[item[0]] = [{
-                                    get: parseFloat(category.split(" / ")[0]),
-                                    total: parseFloat(
-                                      category.split(" / ")[1].split(" = ")[0]
-                                    ),
-                                    weight: parseFloat(
-                                      category
-                                        .split("weight=")[1]
-                                        .split("\n")[0]
-                                    ),
-                                    finished: !category.includes("finished"),
-                                  }];
+                                  assignment[item[0]] = [
+                                    {
+                                      get: parseFloat(category.split(" / ")[0]),
+                                      total: parseFloat(
+                                        category.split(" / ")[1].split(" = ")[0]
+                                      ),
+                                      weight: parseFloat(
+                                        category
+                                          .split("weight=")[1]
+                                          .split("\n")[0]
+                                      ),
+                                      finished: !category.includes("finished"),
+                                    },
+                                  ];
                                 } catch (e) {
                                   assignment[item[0]] = [
                                     {

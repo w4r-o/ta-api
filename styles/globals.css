@@ -7,6 +7,7 @@
 /*scroll bar */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
   scroll-padding-right: 10px;
 }
 
@@ -20,6 +21,10 @@
   border-radius: 10px;
   background-clip: padding-box;
   background: #e1eae0;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 * {

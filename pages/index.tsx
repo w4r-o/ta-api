@@ -57,11 +57,14 @@ export default function Home() {
     <>
       <Head>
         <title>TA Api</title>
-        <meta name="description" content="API for retrieving TA data" />
+        <meta
+          name="description"
+          content="API for retrieving TeachAssist data"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/img/favicon.ico" />
       </Head>
-      <main className="w-screen min-h-screen flex flex-col items-center pt-32 px-10 md:px-32 lg:px-60 bg-[url('/background.png')] bg-cover bg-no-repeat bg-center">
+      <main className="w-screen min-h-screen flex flex-col items-center pt-32 px-10 md:px-32 lg:px-60 bg-[url('/img/background.png')] bg-cover bg-no-repeat bg-center">
         <header className="w-full flex flex-col items-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white">
             TA-API

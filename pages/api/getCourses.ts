@@ -144,18 +144,22 @@ export default function handler(
                       }
 
                       const jsonCourse = {
-                        code: filteredCourse[0].split(" : ")[0],
-                        name: filteredCourse[0].split(" : ")[1],
-                        block: filteredCourse[1]
-                          .replace("Block: P", "")
-                          .split(" ")[0],
-                        room: filteredCourse[1].split("rm. ")[1],
-                        start_time: filteredCourse[2].split(" ")[0],
-                        end_time: filteredCourse[3].split("Dropped")[0].trim(),
-                        dropped_time: filteredCourse[3]
-                          .split("Dropped on")[1]
-                          .trim(),
-                        overall_mark: overall.mark,
+                        code:
+                          filteredCourse[0].split(" : ")[0] || "Unknown Code",
+                        name:
+                          filteredCourse[0].split(" : ")[1] || "Unknown Course",
+                        block:
+                          filteredCourse[1]
+                            .replace("Block: P", "")
+                            .split(" ")[0] || "N/A",
+                        room:
+                          filteredCourse[1].split("rm. ")[1] || "Unknown Room",
+                        start_time: filteredCourse[2].split(" ")[0] || "",
+                        end_time:
+                          filteredCourse[3].split("Dropped")[0].trim() || "",
+                        dropped_time:
+                          filteredCourse[3].split("Dropped on")[1].trim() || "",
+                        overall_mark: overall.mark || "N/A",
                         isFinal: overall.isFinal,
                         isMidterm: overall.isMidterm,
                         link: link,

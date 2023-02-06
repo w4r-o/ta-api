@@ -107,7 +107,7 @@ export default function Home() {
           </div>
           {error && (
             <p className="text-lg md:text-xl font-bold text-center text-red-400/75 mt-2">
-              {error}.
+              {error}
             </p>
           )}
           <PropagateLoader

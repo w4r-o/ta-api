@@ -100,57 +100,70 @@ export default function handler(
             let courses: any = [];
             $(".green_border_message div table tr").each(
               (i: any, elem: any) => {
-                const link = $(elem).find("a").attr("href");
-                let course = $(elem).text().split("\n");
-                // trim whitespace
-                let filteredCourse = [];
-                for (let i = 0; i < course.length; i++) {
-                  course[i] = course[i].trim();
-                  if (course[i].length > 0) {
-                    filteredCourse.push(course[i]);
-                  }
-                }
-                if (filteredCourse.length > 3) {
-                  const overall: any = {
-                    mark: "N/A",
-                    isFinal: false,
-                    isMidterm: false,
-                  };
-                  if (filteredCourse[4]) {
-                    let mark = filteredCourse[4]?.trim().replaceAll(" ", "");
-                    if (mark.includes("FINAL")) {
-                      overall.mark = parseFloat(
-                        mark.split("FINALMARK:")[1].split("%")[0]
-                      );
-                      overall.isFinal = true;
-                    } else if (mark.includes("currentmark")) {
-                      overall.mark = parseFloat(
-                        mark.split("currentmark=")[1].split("%")[0]
-                      );
-                    } else if (mark.includes("MIDTERM")) {
-                      overall.mark = parseFloat(
-                        mark.split("MIDTERMMARK:")[1].split("%")[0]
-                      );
-                      overall.isMidterm = true;
+                try {
+                  const link = $(elem).find("a").attr("href");
+                  let course = $(elem).text().split("\n");
+                  // trim whitespace
+                  if (!course[1].includes("Course Name")) {
+                    let filteredCourse = [];
+                    for (let i = 0; i < course.length; i++) {
+                      course[i] = course[i].trim();
+                      if (course[i].length > 0) {
+                        filteredCourse.push(course[i]);
+                      }
+                    }
+
+                    if (filteredCourse.length > 3) {
+                      const overall: any = {
+                        mark: "N/A",
+                        isFinal: false,
+                        isMidterm: false,
+                      };
+                      if (
+                        filteredCourse[4] &&
+                        !filteredCourse[3].includes("Dropped")
+                      ) {
+                        let mark = filteredCourse[4]
+                          ?.trim()
+                          .replaceAll(" ", "");
+                        if (mark.includes("FINAL")) {
+                          overall.mark = parseFloat(
+                            mark.split("FINALMARK:")[1].split("%")[0]
+                          );
+                          overall.isFinal = true;
+                        } else if (mark.includes("currentmark")) {
+                          overall.mark = parseFloat(
+                            mark.split("currentmark=")[1].split("%")[0]
+                          );
+                        } else if (mark.includes("MIDTERM")) {
+                          overall.mark = parseFloat(
+                            mark.split("MIDTERMMARK:")[1].split("%")[0]
+                          );
+                          overall.isMidterm = true;
+                        }
+                      }
+
+                      const jsonCourse = {
+                        code: filteredCourse[0].split(" : ")[0],
+                        name: filteredCourse[0].split(" : ")[1],
+                        block: filteredCourse[1]
+                          .replace("Block: P", "")
+                          .split(" ")[0],
+                        room: filteredCourse[1].split("rm. ")[1],
+                        start_time: filteredCourse[2].split(" ")[0],
+                        end_time: filteredCourse[3].split("Dropped")[0].trim(),
+                        dropped_time: filteredCourse[3]
+                          .split("Dropped on")[1]
+                          .trim(),
+                        overall_mark: overall.mark,
+                        isFinal: overall.isFinal,
+                        isMidterm: overall.isMidterm,
+                        link: link,
+                      };
+                      courses.push(jsonCourse);
                     }
                   }
-
-                  const jsonCourse = {
-                    code: filteredCourse[0].split(" : ")[0],
-                    name: filteredCourse[0].split(" : ")[1],
-                    block: filteredCourse[1]
-                      .replace("Block: P", "")
-                      .split(" ")[0],
-                    room: filteredCourse[1].split("rm. ")[1],
-                    start_time: filteredCourse[2].split(" ")[0],
-                    end_time: filteredCourse[3].trim(),
-                    overall_mark: overall.mark,
-                    isFinal: overall.isFinal,
-                    isMidterm: overall.isMidterm,
-                    link: link,
-                  };
-                  courses.push(jsonCourse);
-                }
+                } catch {}
               }
             );
 

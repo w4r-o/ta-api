@@ -37,7 +37,7 @@ export default function Home() {
           })
       )
       .catch((err) => {
-        setError(err);
+        setError(JSON.stringify(err));
         setLoading(false);
       });
   };

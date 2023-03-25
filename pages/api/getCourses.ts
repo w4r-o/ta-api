@@ -143,6 +143,16 @@ export default function handler(
                         }
                       }
 
+                      let end_time = "";
+                      let dropped_time = "";
+                      if (filteredCourse[3].includes("Dropped on")) {
+                        end_time = filteredCourse[3].split("Dropped")[0].trim();
+                        dropped_time = filteredCourse[3]
+                          .split("Dropped on")[1]
+                          .trim();
+                      } else {
+                        end_time = filteredCourse[3].trim();
+                      }
                       const jsonCourse = {
                         code:
                           filteredCourse[0].split(" : ")[0] || "Unknown Code",
@@ -155,10 +165,8 @@ export default function handler(
                         room:
                           filteredCourse[1].split("rm. ")[1] || "Unknown Room",
                         start_time: filteredCourse[2].split(" ")[0] || "",
-                        end_time:
-                          filteredCourse[3].split("Dropped")[0].trim() || "",
-                        dropped_time:
-                          filteredCourse[3].split("Dropped on")[1].trim() || "",
+                        end_time: end_time,
+                        dropped_time: dropped_time,
                         overall_mark: overall.mark || "N/A",
                         isFinal: overall.isFinal,
                         isMidterm: overall.isMidterm,
@@ -167,7 +175,9 @@ export default function handler(
                       courses.push(jsonCourse);
                     }
                   }
-                } catch {}
+                } catch (err) {
+                  console.log(err);
+                }
               }
             );
 
